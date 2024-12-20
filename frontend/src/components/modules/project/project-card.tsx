@@ -18,7 +18,7 @@ import { formatDate } from "@/lib/utils";
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
-    <Card>
+    <Card className="flex flex-col">
       <CardHeader className="flex flex-row items-center justify-between space-y-0">
         <div className="flex flex-col space-y-1.5">
           <CardTitle>{project.title}</CardTitle>
@@ -43,7 +43,7 @@ export function ProjectCard({ project }: { project: Project }) {
         </div>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="flex-1">
         <TaskList project={project} />
       </CardContent>
 

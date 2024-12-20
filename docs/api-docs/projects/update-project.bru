@@ -1,0 +1,21 @@
+meta {
+  name: update-project
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{base_url}}/projects/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 4
+}
+
+body:json {
+  {
+    "title": "Task list 1"
+  }
+}

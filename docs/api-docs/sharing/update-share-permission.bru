@@ -1,0 +1,22 @@
+meta {
+  name: update-share-permission
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{base_url}}/projects/:project_id/share/:user_id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  user_id: 2
+  project_id: 4
+}
+
+body:json {
+  {
+    "permission": "editor" // "viewer" or "editor"
+  }
+}

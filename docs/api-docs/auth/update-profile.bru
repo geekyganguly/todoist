@@ -1,0 +1,19 @@
+meta {
+  name: update-profile
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{base_url}}/me
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Demo User",
+    "email": "demo@gmail.com",
+    "username": "demo"
+  }
+}

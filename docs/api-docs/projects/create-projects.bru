@@ -1,0 +1,17 @@
+meta {
+  name: create-projects
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/projects
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "title": "Task list #1"
+  }
+}

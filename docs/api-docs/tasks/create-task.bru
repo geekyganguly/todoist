@@ -1,0 +1,21 @@
+meta {
+  name: create-task
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/projects/:project_id/tasks
+  body: json
+  auth: inherit
+}
+
+params:path {
+  project_id: 4
+}
+
+body:json {
+  {
+    "title": "Task #1"
+  }
+}

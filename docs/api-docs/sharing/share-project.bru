@@ -1,0 +1,22 @@
+meta {
+  name: share-project
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/projects/:project_id/share
+  body: json
+  auth: inherit
+}
+
+params:path {
+  project_id: 4
+}
+
+body:json {
+  {
+    "user_ids": [2],
+    "permission": "viewer" // "viewer" or "editor"
+  }
+}

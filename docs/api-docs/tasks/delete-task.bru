@@ -1,0 +1,16 @@
+meta {
+  name: delete-task
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{base_url}}/projects/:project_id/tasks/:task_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  task_id: 7
+  project_id: 3
+}

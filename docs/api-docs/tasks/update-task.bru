@@ -1,0 +1,22 @@
+meta {
+  name: update-task
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{base_url}}/projects/:project_id/tasks/:task_id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  task_id: 7
+  project_id: 3
+}
+
+body:json {
+  {
+    "title": "Task #2"
+  }
+}

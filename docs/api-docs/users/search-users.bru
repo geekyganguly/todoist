@@ -1,0 +1,15 @@
+meta {
+  name: search-users
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/users/search/:query
+  body: none
+  auth: inherit
+}
+
+params:path {
+  query: abhi
+}

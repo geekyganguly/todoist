@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { Project, SharedProject } from "@/types/project";
-import { getProjectsApi, getProjectSharingApi } from "@/api/project";
+import { getProjectsApi, getProjectShareListApi } from "@/api/project";
 
 export const queryKeys = Object.freeze({
   projects: "projects",
-  projectSharing: "project-sharing",
+  projectShareList: "project-share-list",
 });
 
 export function useGetProjectsApi() {
@@ -20,14 +20,14 @@ export function useGetProjectsApi() {
   });
 }
 
-export function useGetProjectSharingApi(projectId: number) {
+export function useGetProjectShareListApi(projectId: number) {
   const fetcher = async () => {
-    const res = await getProjectSharingApi(projectId);
+    const res = await getProjectShareListApi(projectId);
     return res.data.data;
   };
 
   return useQuery<SharedProject[]>({
-    queryKey: [queryKeys.projectSharing, projectId],
+    queryKey: [queryKeys.projectShareList, projectId],
     queryFn: fetcher,
   });
 }

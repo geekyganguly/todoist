@@ -5,9 +5,9 @@ import { queryKeys } from "@/api/query/project";
 import {
   createProjectApi,
   deleteProjectApi,
-  createProjectSharingApi,
-  updateProjectSharingApi,
-  deleteProjectSharingApi,
+  shareProjectApi,
+  updateProjectSharePermissionApi,
+  deleteProjectShareAccessApi,
 } from "@/api/project";
 
 export function useCreateProjectApi() {
@@ -32,40 +32,46 @@ export function useDeleteProjectApi(projectId: number) {
   });
 }
 
-export function useCreateProjectSharingApi(projectId: number) {
+export function useShareProjectApi(projectId: number) {
   return useMutation({
     mutationFn: (data: Record<string, unknown>) => {
-      return createProjectSharingApi(projectId, data);
+      return shareProjectApi(projectId, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [queryKeys.projectSharing, projectId],
+        queryKey: [queryKeys.projectShareList, projectId],
       });
     },
   });
 }
 
-export function useUpdateProjectSharingApi(projectId: number, userId: number) {
+export function useUpdateProjectSharePermissionApi(
+  projectId: number,
+  userId: number
+) {
   return useMutation({
     mutationFn: (data: Record<string, unknown>) => {
-      return updateProjectSharingApi(projectId, userId, data);
+      return updateProjectSharePermissionApi(projectId, userId, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [queryKeys.projectSharing, projectId],
+        queryKey: [queryKeys.projectShareList, projectId],
       });
     },
   });
 }
 
-export function useDeleteProjectSharingApi(projectId: number, userId: number) {
+export function useRemoveProjectShareAccessApi(
+  projectId: number,
+  userId: number
+) {
   return useMutation({
     mutationFn: () => {
-      return deleteProjectSharingApi(projectId, userId);
+      return deleteProjectShareAccessApi(projectId, userId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [queryKeys.projectSharing, projectId],
+        queryKey: [queryKeys.projectShareList, projectId],
       });
     },
   });

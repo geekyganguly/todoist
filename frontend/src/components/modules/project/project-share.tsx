@@ -30,12 +30,12 @@ import {
 
 import { ProjectShareFormData, useProjectShareForm } from "@/forms/project";
 import { Project, SharedProject } from "@/types/project";
-import { useGetProjectSharingApi } from "@/api/query/project";
+import { useGetProjectShareListApi } from "@/api/query/project";
 import { useSearchUsersApi } from "@/api/query/user";
 import {
-  useCreateProjectSharingApi,
-  useDeleteProjectSharingApi,
-  useUpdateProjectSharingApi,
+  useShareProjectApi,
+  useRemoveProjectShareAccessApi,
+  useUpdateProjectSharePermissionApi,
 } from "@/api/mutation/project";
 import { cn } from "@/lib/utils";
 
@@ -85,7 +85,7 @@ export function ProjectShare({ project }: { project: Project }) {
 function ProjectShareForm({ project }: { project: Project }) {
   const form = useProjectShareForm();
 
-  const { mutateAsync: shareProject, isPending } = useCreateProjectSharingApi(
+  const { mutateAsync: shareProject, isPending } = useShareProjectApi(
     project.id
   );
 
@@ -174,7 +174,7 @@ function ProjectShareForm({ project }: { project: Project }) {
 }
 
 function ProjectSharingList({ project }: { project: Project }) {
-  const { data: projectSharingList } = useGetProjectSharingApi(project.id);
+  const { data: projectSharingList } = useGetProjectShareListApi(project.id);
 
   return (
     <div className="space-y-3">
@@ -211,7 +211,7 @@ function TogglePermission({ sharing }: { sharing: SharedProject }) {
   const [permission, setPermission] = useState(sharing.permission);
 
   const { mutateAsync: togglePermission, isPending } =
-    useUpdateProjectSharingApi(sharing.project.id, sharing.user.id);
+    useUpdateProjectSharePermissionApi(sharing.project.id, sharing.user.id);
 
   const handelPermissionChange = (value: string) => {
     togglePermission({ permission: value }).then(() => setPermission(value));
@@ -247,10 +247,8 @@ function TogglePermission({ sharing }: { sharing: SharedProject }) {
 function RemoveSharingButton({ sharing }: { sharing: SharedProject }) {
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const { mutateAsync: removeSharing, isPending } = useDeleteProjectSharingApi(
-    sharing.project.id,
-    sharing.user.id
-  );
+  const { mutateAsync: removeSharing, isPending } =
+    useRemoveProjectShareAccessApi(sharing.project.id, sharing.user.id);
 
   const onSubmit = () => {
     removeSharing()
@@ -327,7 +325,7 @@ function UsersSelector({
   });
 
   const { data: projectSharing, isLoading: isProjectSharingLoading } =
-    useGetProjectSharingApi(project.id);
+    useGetProjectShareListApi(project.id);
 
   const options = useMemo(() => {
     if (!users) return [];

@@ -1,0 +1,48 @@
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    networks:
+      - default
+    ports:
+      - '${VITE_PORT-5173}:80'
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    networks:
+      - default
+    ports:
+      - '${APP_PORT-8080}:80'
+
+  database:
+    container_name: database
+    image: 'postgres:17'
+    environment:
+      PGPASSWORD: '${DB_PASSWORD:-secret}'
+      POSTGRES_DB: '${DB_DATABASE}'
+      POSTGRES_USER: '${DB_USERNAME}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+      PGPORT: ${DB_PORT:-5432}
+    volumes:
+      - 'database:/var/lib/postgresql/data'
+    networks:
+      - default
+    expose:
+      - '${DB_PORT:-5432}'
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  database:
+    driver: local

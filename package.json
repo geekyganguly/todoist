@@ -1,0 +1,12 @@
+{
+  "name": "todoist",
+  "version": "1.0.0",
+  "author": "Saurav Ganguly <work@sauravganguly.in>",
+  "license": "MIT",
+  "scripts": {
+    "dev:start": "docker compose -f docker-compose.local.yml --env-file ./backend/.env --env-file ./frontend/.env up --build",
+    "dev:migrate": "docker compose -f docker-compose.local.yml --env-file ./backend/.env --env-file ./frontend/.env exec backend php artisan migrate",
+    "start": "docker compose --env-file ./backend/.env --env-file ./frontend/.env up --build -d",
+    "migrate": "docker compose --env-file ./backend/.env --env-file ./frontend/.env exec backend php artisan migrate"
+  }
+}

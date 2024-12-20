@@ -13,9 +13,9 @@ class SharedProjectController extends Controller
 
     public function index(Request $request, Project $project)
     {
-        // fetch shared project
-        $sharedProject = SharedProject::with(['user', 'project'])->where('project_id', $project->id);
-        $data = SharedProjectResource::collection($sharedProject->orderBy('created_at', 'desc')->get());
+        // fetch shared projects
+        $sharedProjects = SharedProject::with(['user', 'project'])->where('project_id', $project->id);
+        $data = SharedProjectResource::collection($sharedProjects->orderBy('created_at', 'desc')->get());
 
         return response()->json(['data' => $data], 200);
     }
@@ -29,8 +29,10 @@ class SharedProjectController extends Controller
             'permission' => 'required|in:viewer,editor',
         ]);
 
+        $sharedProjects = [];
+
         foreach ($request->user_ids as $userId) {
-            SharedProject::updateOrCreate(
+            $sharedProject = SharedProject::updateOrCreate(
                 [
                     'project_id' => $project->id,
                     'user_id' => $userId,
@@ -40,16 +42,20 @@ class SharedProjectController extends Controller
                     'permission' => $request->permission,
                 ]
             );
+
+            $sharedProjects[] = $sharedProject;
         }
 
-        return response()->json(['message' => 'Shared project created'], 201);
+        $data = SharedProjectResource::collection($sharedProjects);
+
+        return response()->json(['data' => $data, 'message' =>  "Project shared successfully"], 200);
     }
 
 
-    public function update(Request $request, int $projectId, int $sharedProjectId)
+    public function update(Request $request, int $projectId, int $userId)
     {
         // fetch shared project
-        $sharedProject = SharedProject::findOrFail($sharedProjectId);
+        $sharedProject = SharedProject::where(['project_id' => $projectId, 'user_id' => $userId])->firstOrFail();
 
         // validate the request
         $request->validate([
@@ -59,18 +65,20 @@ class SharedProjectController extends Controller
         // update shared project
         $sharedProject->update($request->all());
 
-        return response()->json(['message' => 'Shared project updated']);
+        $data = new SharedProjectResource($sharedProject);
+
+        return response()->json(['data' => $data, 'message' => "Permission updated successfully"], 200);
     }
 
 
-    public function destroy(int $projectId, int $sharedProjectId)
+    public function destroy(int $projectId, int $userId)
     {
         // fetch shared project
-        $sharedProject = SharedProject::findOrFail($sharedProjectId);
+        $sharedProject = SharedProject::where(['project_id' => $projectId, 'user_id' => $userId])->firstOrFail();
 
         // delete shared project 
         $sharedProject->delete();
 
-        return response()->json(['message' => 'Shared project deleted'], 200);
+        return response()->json(['message' => 'Project sharing removed'], 200);
     }
 }

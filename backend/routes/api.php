@@ -20,5 +20,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('projects', ProjectController::class);
     Route::apiResource('projects.tasks', TaskController::class);
-    Route::apiResource('projects.sharing', SharedProjectController::class);
+    Route::apiResource('projects.share', SharedProjectController::class);
 });

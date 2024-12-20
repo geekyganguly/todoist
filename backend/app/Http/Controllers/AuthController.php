@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+
+use App\Http\Resources\UserResource;
 use App\Models\User;
 
 class AuthController extends Controller
@@ -19,14 +21,15 @@ class AuthController extends Controller
         ]);
 
         // create user
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'username' => $request->username,
             'password' => Hash::make($request->password),
         ]);
+        $data = new UserResource($user);
 
-        return response()->json(['message' => 'User registered successfully'], 200);
+        return response()->json(['data' => $data, 'message' => 'User registered successfully'], 200);
     }
 
     public function login(Request $request)
@@ -48,7 +51,13 @@ class AuthController extends Controller
         // generate token
         $token = $user->createToken($user->username)->plainTextToken;
 
-        return response()->json(['data' => ['token' => $token]], 200);
+        return response()->json([
+            'data' => [
+                'user' => new UserResource($user),
+                'token' => $token
+            ],
+            'message' => 'Logged in successfully',
+        ], 200);
     }
 
     public function logout(Request $request)
@@ -80,8 +89,10 @@ class AuthController extends Controller
 
         // update user
         $user->update($request->all());
+        $data = new UserResource($user);
 
-        return response()->json(['message' => 'Profile updated successfully'], 200);
+
+        return response()->json(['data' => $data, 'message' => 'Profile updated successfully'], 200);
     }
 
     public function changePassword(Request $request)

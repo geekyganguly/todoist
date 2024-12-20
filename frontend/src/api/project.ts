@@ -28,30 +28,27 @@ export async function getProjectSharingApi(
   projectId: number,
   config?: AxiosRequestConfig
 ) {
-  return await baseAxios.get(`/projects/${projectId}/sharing`, config);
+  return await baseAxios.get(`/projects/${projectId}/share`, config);
 }
 
 export async function createProjectSharingApi(
   projectId: number,
   data: Record<string, unknown>
 ) {
-  return await baseAxios.post(`/projects/${projectId}/sharing`, data);
+  return await baseAxios.post(`/projects/${projectId}/share`, data);
 }
 
 export async function updateProjectSharingApi(
   projectId: number,
-  sharingId: number,
+  userId: number,
   data: Record<string, unknown>
 ) {
-  return await baseAxios.put(
-    `/projects/${projectId}/sharing/${sharingId}`,
-    data
-  );
+  return await baseAxios.put(`/projects/${projectId}/share/${userId}`, data);
 }
 
 export async function deleteProjectSharingApi(
   projectId: number,
-  sharingId: number
+  userId: number
 ) {
-  return await baseAxios.delete(`/projects/${projectId}/sharing/${sharingId}`);
+  return await baseAxios.delete(`/projects/${projectId}/share/${userId}`);
 }

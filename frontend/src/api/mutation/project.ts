@@ -45,13 +45,10 @@ export function useCreateProjectSharingApi(projectId: number) {
   });
 }
 
-export function useUpdateProjectSharingApi(
-  projectId: number,
-  sharingId: number
-) {
+export function useUpdateProjectSharingApi(projectId: number, userId: number) {
   return useMutation({
     mutationFn: (data: Record<string, unknown>) => {
-      return updateProjectSharingApi(projectId, sharingId, data);
+      return updateProjectSharingApi(projectId, userId, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -61,13 +58,10 @@ export function useUpdateProjectSharingApi(
   });
 }
 
-export function useDeleteProjectSharingApi(
-  projectId: number,
-  sharingId: number
-) {
+export function useDeleteProjectSharingApi(projectId: number, userId: number) {
   return useMutation({
     mutationFn: () => {
-      return deleteProjectSharingApi(projectId, sharingId);
+      return deleteProjectSharingApi(projectId, userId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

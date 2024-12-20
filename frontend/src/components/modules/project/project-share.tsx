@@ -96,7 +96,7 @@ function ProjectShareForm({ project }: { project: Project }) {
     })
       .then(() => {
         form.reset();
-        toast.success("Task list shared");
+        toast.success("Task list shared successfully");
       })
       .catch(() => toast.error("Failed to share task list"));
   };
@@ -211,7 +211,7 @@ function TogglePermission({ sharing }: { sharing: SharedProject }) {
   const [permission, setPermission] = useState(sharing.permission);
 
   const { mutateAsync: togglePermission, isPending } =
-    useUpdateProjectSharingApi(sharing.project.id, sharing.id);
+    useUpdateProjectSharingApi(sharing.project.id, sharing.user.id);
 
   const handelPermissionChange = (value: string) => {
     togglePermission({ permission: value }).then(() => setPermission(value));
@@ -249,7 +249,7 @@ function RemoveSharingButton({ sharing }: { sharing: SharedProject }) {
 
   const { mutateAsync: removeSharing, isPending } = useDeleteProjectSharingApi(
     sharing.project.id,
-    sharing.id
+    sharing.user.id
   );
 
   const onSubmit = () => {

@@ -72,8 +72,9 @@ class AuthController extends Controller
     {
         // get user from request
         $user = $request->user();
+        $data = new UserResource($user);
 
-        return response()->json(['data' => $user], 200);
+        return response()->json(['data' => $data], 200);
     }
 
     public function updateProfile(Request $request)

@@ -1,8 +1,8 @@
 import { toast } from "sonner";
 import { useMemo, useState } from "react";
-import { LoaderCircleIcon, Share2Icon, XIcon } from "lucide-react";
+import { CheckIcon, LoaderCircleIcon, Share2Icon, XIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { VisuallyHidden } from "@/components/ui/visually-hidden";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -37,6 +37,7 @@ import {
   useDeleteProjectSharingApi,
   useUpdateProjectSharingApi,
 } from "@/api/mutation/project";
+import { cn } from "@/lib/utils";
 
 const permissions = [
   { value: "viewer", label: "Viewer" },
@@ -191,7 +192,7 @@ function ProjectSharingList({ project }: { project: Project }) {
 function ProjectSharingCard({ sharing }: { sharing: SharedProject }) {
   return (
     <Card key={sharing.id} className="shadow-none">
-      <div className="grid grid-cols-1 sm:grid-cols-2 items-center justify-between p-4 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 gap-4">
         <div className="flex flex-col">
           <CardTitle>{sharing.user.username}</CardTitle>
           <CardDescription>{sharing.user.email}</CardDescription>
@@ -244,32 +245,70 @@ function TogglePermission({ sharing }: { sharing: SharedProject }) {
 }
 
 function RemoveSharingButton({ sharing }: { sharing: SharedProject }) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const { mutateAsync: removeSharing, isPending } = useDeleteProjectSharingApi(
     sharing.project.id,
     sharing.id
   );
 
-  return (
-    <Tooltip>
-      <TooltipTrigger>
-        <Button
-          size="icon"
-          variant="secondary"
-          className="w-auto px-3 sm:px-0 sm:w-8 rounded-full"
-          disabled={isPending}
-          onClick={() =>
-            removeSharing()
-              .then(() => toast.success("Task list sharing removed"))
-              .catch(() => toast.error("Failed to remove sharing"))
-          }
-        >
-          <XIcon />
-          <span className="flex sm:hidden">Remove</span>
-        </Button>
-      </TooltipTrigger>
+  const onSubmit = () => {
+    removeSharing()
+      .then(() => toast.success("Task list sharing removed"))
+      .catch(() => toast.error("Failed to remove sharing"));
+  };
 
-      <TooltipContent>Remove Sharing</TooltipContent>
-    </Tooltip>
+  return (
+    <div>
+      {isDeleting ? (
+        <div
+          className={cn(
+            buttonVariants({ variant: "secondary", size: "sm" }),
+            "gap-1 p-1 rounded-full"
+          )}
+        >
+          <Button
+            size="icon"
+            variant="secondary"
+            className="rounded-full shadow-none size-7 text-orange-500"
+            disabled={isPending}
+            onClick={onSubmit}
+          >
+            {isPending ? (
+              <LoaderCircleIcon className="animate-spin" />
+            ) : (
+              <CheckIcon />
+            )}
+          </Button>
+
+          <Button
+            size="icon"
+            variant="secondary"
+            className="rounded-full shadow-none size-7"
+            disabled={isPending}
+            onClick={() => setIsDeleting(false)}
+          >
+            <XIcon />
+          </Button>
+        </div>
+      ) : (
+        <Tooltip>
+          <TooltipTrigger>
+            <Button
+              size="icon"
+              variant="secondary"
+              className="w-auto px-3 sm:px-0 sm:w-8 rounded-full"
+              disabled={isPending}
+              onClick={() => setIsDeleting(true)}
+            >
+              <XIcon />
+              <span className="flex sm:hidden">Remove</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Remove Sharing</TooltipContent>
+        </Tooltip>
+      )}
+    </div>
   );
 }
 

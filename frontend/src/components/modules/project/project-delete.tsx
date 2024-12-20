@@ -41,7 +41,7 @@ export function ProjectDelete({ project }: { project: Project }) {
           <Button
             size="icon"
             variant="secondary"
-            className="rounded-full shadow-none size-7 text-destructive"
+            className="rounded-full shadow-none size-7 text-orange-500"
             disabled={isPending}
             onClick={onSubmit}
           >

@@ -66,7 +66,7 @@ export function TaskEdit({
           <Button
             size="icon"
             variant="secondary"
-            className="rounded-full shadow-none size-7 text-green-600"
+            className="rounded-full shadow-none size-7 text-green-500"
             type="submit"
             disabled={isPending}
           >

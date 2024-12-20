@@ -42,7 +42,7 @@ export function TaskDelete({ task }: { task: Task }) {
           <Button
             size="icon"
             variant="secondary"
-            className="rounded-full shadow-none size-7 text-destructive"
+            className="rounded-full shadow-none size-7 text-orange-500"
             disabled={isPending}
             onClick={onSubmit}
           >

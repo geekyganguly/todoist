@@ -8,12 +8,24 @@ import {
   shareProjectApi,
   updateProjectSharePermissionApi,
   deleteProjectShareAccessApi,
+  updateProjectApi,
 } from "@/api/project";
 
 export function useCreateProjectApi() {
   return useMutation({
     mutationFn: (data: Record<string, unknown>) => {
       return createProjectApi(data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [queryKeys.projects] });
+    },
+  });
+}
+
+export function useUpdateProjectApi(projectId: number) {
+  return useMutation({
+    mutationFn: (data: Record<string, unknown>) => {
+      return updateProjectApi(projectId, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.projects] });

@@ -6,14 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 
 import { useCreateProjectApi } from "@/api/mutation/project";
-import { ProjectAddFormData, useProjectAddForm } from "@/forms/project";
+import { ProjectFormData, useProjectForm } from "@/forms/project";
 
 export function ProjectAdd() {
-  const form = useProjectAddForm();
+  const form = useProjectForm();
 
   const { mutateAsync: createProject, isPending } = useCreateProjectApi();
 
-  const onSubmit = (data: ProjectAddFormData) => {
+  const onSubmit = (data: ProjectFormData) => {
     createProject(data)
       .then(() => {
         form.reset();

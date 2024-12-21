@@ -1,15 +1,7 @@
 import { useState } from "react";
-import { PencilIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
-import { TaskEdit } from "@/components/modules/task/task-edit";
 import { TaskDelete } from "@/components/modules/task/task-delete";
+import { TaskEdit, TaskEditButton } from "@/components/modules/task/task-edit";
 import { TaskCompleteToggle } from "@/components/modules/task/task-complete-toggle";
 
 import { Task } from "@/types/task";
@@ -39,20 +31,7 @@ export function TaskCard({ task }: { task: Task }) {
             </p>
 
             {(task.project.is_owner || task.project.is_editor) && (
-              <Tooltip>
-                <TooltipTrigger>
-                  <Button
-                    size="icon"
-                    variant="secondary"
-                    className="rounded-full"
-                    onClick={() => setIsEditing(true)}
-                  >
-                    <PencilIcon />
-                  </Button>
-                </TooltipTrigger>
-
-                <TooltipContent>Edit Task</TooltipContent>
-              </Tooltip>
+              <TaskEditButton onClick={() => setIsEditing(true)} />
             )}
           </div>
         )}

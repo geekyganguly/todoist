@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 
 import { useCreateTaskApi } from "@/api/mutation/task";
-import { TaskFormData, useTaskAddForm } from "@/forms/task";
+import { TaskFormData, useTaskForm } from "@/forms/task";
 import { Project } from "@/types/project";
 
 export function TaskAdd({ project }: { project: Project }) {
-  const form = useTaskAddForm();
+  const form = useTaskForm();
 
   const { mutateAsync: createTask, isPending } = useCreateTaskApi(project.id);
 

@@ -1,19 +1,21 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Option } from "@/components/ui/multiple-selector";
 
-const projectAddSchema = z.object({
+import { Option } from "@/components/ui/multiple-selector";
+import { Project } from "@/types/project";
+
+const projectSchema = z.object({
   title: z.string().trim().min(1, "Required"),
 });
 
-export type ProjectAddFormData = z.infer<typeof projectAddSchema>;
+export type ProjectFormData = z.infer<typeof projectSchema>;
 
-export function useProjectAddForm() {
-  return useForm<ProjectAddFormData>({
-    resolver: zodResolver(projectAddSchema),
+export function useProjectForm(project?: Project) {
+  return useForm<ProjectFormData>({
+    resolver: zodResolver(projectSchema),
     defaultValues: {
-      title: "",
+      title: project?.title || "",
     },
   });
 }

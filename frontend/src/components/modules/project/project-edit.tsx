@@ -10,32 +10,32 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { Task } from "@/types/task";
-import { useUpdateTaskApi } from "@/api/mutation/task";
-import { TaskFormData, useTaskForm } from "@/forms/task";
 import { cn } from "@/lib/utils";
+import { useProjectForm } from "@/forms/project";
+import { useUpdateProjectApi } from "@/api/mutation/project";
+import { TaskFormData } from "@/forms/task";
+import { Project } from "@/types/project";
 
-export function TaskEdit({
-  task,
+export function ProjectEdit({
+  project,
   closeEditing,
 }: {
-  task: Task;
+  project: Project;
   closeEditing: () => void;
 }) {
-  const form = useTaskForm(task);
+  const form = useProjectForm(project);
 
-  const { mutateAsync: updateTask, isPending } = useUpdateTaskApi(
-    task.project.id,
-    task.id
+  const { mutateAsync: updateProject, isPending } = useUpdateProjectApi(
+    project.id
   );
 
   const onSubmit = (data: TaskFormData) => {
-    updateTask(data)
+    updateProject(data)
       .then(() => {
         form.reset();
-        toast.success("Task updated successfully");
+        toast.success("Project updated successfully");
       })
-      .catch(() => toast.error("Failed to update task"))
+      .catch(() => toast.error("Failed to update project"))
       .finally(() => closeEditing());
   };
 
@@ -98,7 +98,7 @@ export function TaskEdit({
   );
 }
 
-export function TaskEditButton({ onClick }: { onClick: () => void }) {
+export function ProjectEditButton({ onClick }: { onClick: () => void }) {
   return (
     <Tooltip>
       <TooltipTrigger>
@@ -112,7 +112,7 @@ export function TaskEditButton({ onClick }: { onClick: () => void }) {
         </Button>
       </TooltipTrigger>
 
-      <TooltipContent>Edit Task</TooltipContent>
+      <TooltipContent>Edit Project</TooltipContent>
     </Tooltip>
   );
 }

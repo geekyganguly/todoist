@@ -9,20 +9,11 @@ const taskSchema = z.object({
 
 export type TaskFormData = z.infer<typeof taskSchema>;
 
-export function useTaskAddForm() {
+export function useTaskForm(task?: Task) {
   return useForm<TaskFormData>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
-      title: "",
-    },
-  });
-}
-
-export function useTaskEditForm(task: Task) {
-  return useForm<TaskFormData>({
-    resolver: zodResolver(taskSchema),
-    defaultValues: {
-      title: task.title,
+      title: task?.title || "",
     },
   });
 }

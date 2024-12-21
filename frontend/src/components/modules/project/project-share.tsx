@@ -2,6 +2,7 @@ import { toast } from "sonner";
 import { useMemo, useState } from "react";
 import { CheckIcon, LoaderCircleIcon, Share2Icon, XIcon } from "lucide-react";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { VisuallyHidden } from "@/components/ui/visually-hidden";
@@ -174,13 +175,23 @@ function ProjectShareForm({ project }: { project: Project }) {
 }
 
 function ProjectSharingList({ project }: { project: Project }) {
-  const { data: projectSharingList } = useGetProjectShareListApi(project.id);
+  const { data: projectSharingList, isLoading } = useGetProjectShareListApi(
+    project.id
+  );
 
   return (
     <div className="space-y-3">
       <div className="font-medium">Shared with</div>
 
       <div className="space-y-2">
+        {isLoading && (
+          <>
+            {Array.from({ length: 3 }, (_, i) => i).map((id) => (
+              <Skeleton key={`loader-${id}`} className="h-8" />
+            ))}
+          </>
+        )}
+
         {projectSharingList?.map((sharing) => (
           <ProjectSharingCard key={sharing.id} sharing={sharing} />
         ))}

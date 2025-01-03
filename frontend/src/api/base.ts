@@ -33,7 +33,6 @@ baseAxios.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       if (getAuthToken()) {
         removeAuthToken();
-        document.dispatchEvent(new CustomEvent("auth.change"));
       }
     }
 

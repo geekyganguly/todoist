@@ -1,10 +1,11 @@
-import { Link } from "react-router";
-import { AlertTriangleIcon, LoaderCircle } from "lucide-react";
+import { useEffect } from "react";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router";
+import { toast } from "sonner";
+import { LoaderCircle } from "lucide-react";
 
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/ui/password-input";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { PasswordValidation } from "@/components/ui/password-validation";
 import {
   Card,
   CardContent,
@@ -21,29 +22,42 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { setAuthToken } from "@/lib/utils";
-import { useLoginApi } from "@/api/mutation/auth";
-import { LoginFormData, useLoginForm } from "@/forms/auth";
+import { useResetPasswordApi } from "@/api/mutation/auth";
+import { useResetPasswordForm, ResetPasswordFormData } from "@/forms/auth";
 
 export default function Page() {
-  const form = useLoginForm();
-  const { mutateAsync: login, isError, isPending } = useLoginApi();
+  const navigate = useNavigate();
 
-  const onSubmit = (data: LoginFormData) => {
-    login(data).then(({ data }) => {
-      setAuthToken(data.data.token);
-      document.dispatchEvent(new CustomEvent("auth.change"));
-    });
+  const { token } = useParams();
+  const [searchParams] = useSearchParams();
+  const email = searchParams.get("email");
+
+  const form = useResetPasswordForm();
+  const { mutateAsync: login, isPending } = useResetPasswordApi();
+
+  const onSubmit = (data: ResetPasswordFormData) => {
+    login(data)
+      .then(() => navigate("/reset-password-done"))
+      .catch(() => toast.error("Failed to reset password"));
   };
+
+  useEffect(() => {
+    if (token && email) {
+      form.setValue("email", email);
+      form.setValue("token", token);
+    } else {
+      navigate("/error");
+    }
+  }, [email, form, navigate, token]);
 
   return (
     <div className="flex-1 flex">
       <div className="container flex items-center justify-center">
         <Card className="w-full max-w-md rounded-xl shadow-lg">
           <CardHeader className="p-8">
-            <CardTitle className="text-xl">Welcome back</CardTitle>
+            <CardTitle className="text-xl">Reset Password</CardTitle>
             <CardDescription className="text-sm">
-              Please enter your details to sign in.
+              Enter your new password below.
             </CardDescription>
           </CardHeader>
 
@@ -53,38 +67,7 @@ export default function Page() {
                 className="space-y-4"
                 onSubmit={form.handleSubmit(onSubmit)}
               >
-                {isError && (
-                  <Alert variant="destructive">
-                    <AlertTriangleIcon className="size-4" />
-                    <AlertDescription className="text-sm">
-                      The email address and/or password you specified are not
-                      correct.
-                    </AlertDescription>
-                  </Alert>
-                )}
-
                 <div className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem className="w-full">
-                        <FormLabel>
-                          <span>Email Address </span>
-                          <span className="text-destructive">*</span>
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            type="email"
-                            error={!!form.formState.errors.email}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
                   <FormField
                     control={form.control}
                     name="password"
@@ -95,8 +78,32 @@ export default function Page() {
                           <span className="text-destructive">*</span>
                         </FormLabel>
                         <FormControl>
+                          <div className="space-y-3">
+                            <PasswordInput
+                              error={!!form.formState.errors.password}
+                              {...field}
+                            />
+                            <PasswordValidation password={field.value} />
+                          </div>
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="password_confirmation"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormLabel>
+                          <span>Confirm Password </span>
+                          <span className="text-destructive">*</span>
+                        </FormLabel>
+                        <FormControl>
                           <PasswordInput
-                            error={!!form.formState.errors.password}
+                            error={
+                              !!form.formState.errors.password_confirmation
+                            }
                             {...field}
                           />
                         </FormControl>
@@ -106,33 +113,25 @@ export default function Page() {
                   />
                 </div>
 
-                <Button type="submit" className="w-full" disabled={isPending}>
+                <Button
+                  type="submit"
+                  className="w-full space-x-2"
+                  disabled={isPending}
+                >
                   {isPending && <LoaderCircle className="animate-spin" />}
-                  <span>{isPending ? "Signing in..." : "Sign in"}</span>
+                  <span>Reset Password</span>
                 </Button>
 
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <div className="flex items-center justify-center text-sm gap-x-1">
-                    <span>Don't have an account yet?</span>
+                    <span>Have password?</span>
 
                     <Button
                       asChild
                       variant="link"
                       className="h-0 px-0 font-semibold"
                     >
-                      <Link to="/register">Register</Link>
-                    </Button>
-                  </div>
-
-                  <div className="flex items-center justify-center text-sm gap-x-1">
-                    <span>Forgot password?</span>
-
-                    <Button
-                      asChild
-                      variant="link"
-                      className="h-0 px-0 font-semibold"
-                    >
-                      <Link to="/forgot-password">Reset Password</Link>
+                      <Link to="/login">Login</Link>
                     </Button>
                   </div>
                 </div>

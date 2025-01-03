@@ -3,6 +3,8 @@ import {
   loginApi,
   logoutApi,
   registerApi,
+  forgotPasswordApi,
+  resetPasswordApi,
   changePasswordApi,
   updateProfileApi,
 } from "@/api/auth";
@@ -19,6 +21,22 @@ export function useRegisterApi() {
   return useMutation({
     mutationFn: (data: Record<string, unknown>) => {
       return registerApi(data);
+    },
+  });
+}
+
+export function useForgotPasswordApi() {
+  return useMutation({
+    mutationFn: (data: Record<string, unknown>) => {
+      return forgotPasswordApi(data);
+    },
+  });
+}
+
+export function useResetPasswordApi() {
+  return useMutation({
+    mutationFn: (data: Record<string, unknown>) => {
+      return resetPasswordApi(data);
     },
   });
 }

@@ -9,12 +9,14 @@ export default function Page() {
         <h1 className="text-2xl md:text-4xl font-bold mb-4">
           404 - Page Not Found
         </h1>
+
         <p className="text-lg md:text-xl mb-8">
           Oops! The page you're looking for doesn't exist.
         </p>
-        <Link to="/">
-          <Button>Go back home</Button>
-        </Link>
+
+        <Button asChild>
+          <Link to="/">Return to Home</Link>
+        </Button>
       </div>
     </div>
   );

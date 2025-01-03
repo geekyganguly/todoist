@@ -10,6 +10,10 @@ import NotFoundPage from "@/pages/not-found";
 import HomePage from "@/pages/home";
 import LoginPage from "@/pages/login";
 import RegisterPage from "@/pages/register";
+import ForgotPasswordPage from "@/pages/forgot-password";
+import ForgotPasswordSentPage from "@/pages/forgot-password-sent";
+import RestPasswordPage from "@/pages/reset-password";
+import RestPasswordDonePage from "@/pages/reset-password-done";
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +42,38 @@ export const router = createBrowserRouter([
         element: (
           <AnonymousRoute>
             <RegisterPage />
+          </AnonymousRoute>
+        ),
+      },
+      {
+        path: "forgot-password",
+        element: (
+          <AnonymousRoute>
+            <ForgotPasswordPage />
+          </AnonymousRoute>
+        ),
+      },
+      {
+        path: "forgot-password-sent",
+        element: (
+          <AnonymousRoute>
+            <ForgotPasswordSentPage />
+          </AnonymousRoute>
+        ),
+      },
+      {
+        path: "reset-password/:token",
+        element: (
+          <AnonymousRoute>
+            <RestPasswordPage />
+          </AnonymousRoute>
+        ),
+      },
+      {
+        path: "reset-password-done",
+        element: (
+          <AnonymousRoute>
+            <RestPasswordDonePage />
           </AnonymousRoute>
         ),
       },

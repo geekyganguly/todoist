@@ -7,7 +7,7 @@ export default function ErrorBoundary() {
 
   if (error instanceof Error) {
     return (
-      <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
+      <pre className="p-4 rounded-md overflow-x-auto">
         <code className="text-sm">{error.stack}</code>
       </pre>
     );
@@ -21,9 +21,9 @@ export default function ErrorBoundary() {
       </p>
 
       <div className="flex space-x-4">
-        <Link to="/">
-          <Button variant="outline">Go back home</Button>
-        </Link>
+        <Button asChild variant="outline">
+          <Link to="/">Return to Home</Link>
+        </Button>
       </div>
     </div>
   );

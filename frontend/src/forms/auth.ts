@@ -66,6 +66,64 @@ export const useRegisterForm = () => {
   });
 };
 
+export const forgotPasswordSchema = z.object({
+  email: z.string().trim().min(1, "Required").email(),
+});
+
+export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
+
+export const useForgotPasswordForm = () => {
+  return useForm<ForgotPasswordFormData>({
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: {
+      email: "",
+    },
+  });
+};
+
+export const resetPasswordSchema = z
+  .object({
+    token: z.string().trim().min(1, "Required."),
+    email: z.string().trim().min(1, "Required").email(),
+    password: z.string().trim().min(1, "Required."),
+    password_confirmation: z.string().trim().min(1, "Required."),
+  })
+  .superRefine(({ password, password_confirmation }, ctx) => {
+    if (password !== password_confirmation) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Passwords don't match",
+        path: ["password_confirmation"],
+      });
+    }
+
+    if (password) {
+      const strength = checkStrength(password);
+      const strengthScore = strength.filter((req) => req.met).length;
+      if (strengthScore < 4) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "",
+          path: ["password"],
+        });
+      }
+    }
+  });
+
+export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
+
+export const useResetPasswordForm = () => {
+  return useForm<ResetPasswordFormData>({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: {
+      token: "",
+      email: "",
+      password: "",
+      password_confirmation: "",
+    },
+  });
+};
+
 export const editProfileSchema = z.object({
   name: z.string().trim().min(1, "Required."),
   email: z.string().trim().min(1, "Required.").email(),

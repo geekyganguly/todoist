@@ -3,6 +3,8 @@ import { baseAxios } from "@/api/base";
 const URLs = Object.freeze({
   LOGIN: "/login",
   REGISTER: "/register",
+  FORGOT_PASSWORD: "/forgot-password",
+  RESET_PASSWORD: "/reset-password",
   CHANGE_PASSWORD: "/change-password",
   LOGOUT: "/logout",
   PROFILE: "/me",
@@ -14,6 +16,14 @@ export async function loginApi(data: Record<string, unknown>) {
 
 export async function registerApi(data: Record<string, unknown>) {
   return await baseAxios.post(URLs.REGISTER, data);
+}
+
+export async function forgotPasswordApi(data: Record<string, unknown>) {
+  return await baseAxios.post(URLs.FORGOT_PASSWORD, data);
+}
+
+export async function resetPasswordApi(data: Record<string, unknown>) {
+  return await baseAxios.post(URLs.RESET_PASSWORD, data);
 }
 
 export async function getProfileApi() {

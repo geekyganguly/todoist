@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -27,10 +29,54 @@ class AuthController extends Controller
             'username' => $request->username,
             'password' => Hash::make($request->password),
         ]);
-        $data = new UserResource($user);
 
-        return response()->json(['data' => $data, 'message' => 'User registered successfully'], 200);
+        return response()->json([
+            'data' => new UserResource($user),
+            'message' => 'User registered successfully'
+        ], 200);
     }
+
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        Password::sendResetLink(
+            $request->only('email')
+        );
+
+        return response()->json(['message' => 'Password reset link sent'], 200);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $status = Password::reset(
+            $request->only('token', 'email', 'password', 'password_confirmation'),
+            function (User $user, string $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ]);
+
+                $user->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            return response()->json(['message' => "Password reset successful"], 200);
+        }
+
+        return response()->json(['message' => 'Invalid token'], 422);
+    }
+
 
     public function login(Request $request)
     {

@@ -103,6 +103,53 @@ DELETE /logout
 }
 ```
 
+#### Forgot Password
+
+```
+POST /forgot-password
+```
+
+**Request Body:**
+
+```json
+{
+  "email": "string"
+}
+```
+
+**Response:** `200 OK`
+
+```json
+{
+  "message": "Password reset link sent"
+}
+```
+
+#### Reset Password
+
+```
+POST /reset-password
+```
+
+**Request Body:**
+
+```json
+{
+  "token": "string",
+  "email": "string",
+  "password": "string",
+  "password_confirmation": "string"
+}
+```
+
+**Response:** `200 OK`
+
+```json
+{
+  "message": "Password reset successful"
+}
+```
+
 #### Get Profile
 
 ```

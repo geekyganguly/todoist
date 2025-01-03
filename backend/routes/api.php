@@ -16,15 +16,29 @@ Route::middleware('guest')->group(function () {
 
     // forgot & reset password
     Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::post('reset-password', [AuthController::class, 'resetPassword']);
+
+    // forgot password redirect
     Route::get('reset-password/{token}', function (Request $request, string $token) {
         $frontendURL = Config::get('app.frontend_url');
-        $queryParams = http_build_query($request->all());
+        $queryParams = http_build_query($request->query());
         return redirect()->away($frontendURL . '/reset-password/' . $token . '?' . $queryParams);
     })->name('password.reset');
-    Route::post('reset-password', [AuthController::class, 'resetPassword']);
+
+    // email verification redirect
+    Route::get('email/verify/{id}/{hash}', function (Request $request, string $id, string $hash) {
+        $frontendURL = Config::get('app.frontend_url');
+        $queryParams = http_build_query($request->query());
+        return redirect()->away($frontendURL . '/email/verify/' . $id . '/' . $hash . '?' . $queryParams);
+    })->name('verification.verify');
 });
 
+
 Route::middleware('auth:sanctum')->group(function () {
+    // email verification
+    Route::post('email/request-verification', [AuthController::class, 'sendVerificationEmail']);
+    Route::post('email/verify', [AuthController::class, 'verifyEmail']);
+
     Route::get('me', [AuthController::class, 'getProfile']);
     Route::put('me', [AuthController::class, 'updateProfile']);
     Route::delete('logout', [AuthController::class, 'logout']);

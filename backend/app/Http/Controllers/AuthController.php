@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Auth\Events\Registered;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -29,6 +31,9 @@ class AuthController extends Controller
             'username' => $request->username,
             'password' => Hash::make($request->password),
         ]);
+
+        // Trigger registered event (for verification email etc.)
+        event(new Registered($user));
 
         return response()->json([
             'data' => new UserResource($user),
@@ -112,6 +117,54 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Logged out successfully'], 200);
+    }
+
+    public function sendVerificationEmail(Request $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return response()->json([
+                'message' => 'Email already verified'
+            ], 200);
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+
+        return response()->json([
+            'message' => 'Verification link sent'
+        ], 200);
+    }
+
+    public function verifyEmail(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|string',
+            'hash' => 'required|string',
+        ]);
+
+        if (!hash_equals((string) $request->user()->getKey(), $request->id)) {
+            return response()->json([
+                'message' => 'Invalid link'
+            ], 422);
+        }
+
+        if (!hash_equals(sha1($request->user()->getEmailForVerification()), $request->hash)) {
+            return response()->json([
+                'message' => 'Invalid link'
+            ], 422);
+        }
+
+        if ($request->user()->hasVerifiedEmail()) {
+            return response()->json([
+                'message' => 'Email already verified'
+            ], 200);
+        }
+
+        $request->user()->markEmailAsVerified();
+        event(new Verified($request->user()));
+
+        return response()->json([
+            'message' => 'Email verified successfully'
+        ], 200);
     }
 
     public function getProfile(Request $request)

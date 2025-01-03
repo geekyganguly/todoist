@@ -14,6 +14,7 @@ import ForgotPasswordPage from "@/pages/forgot-password";
 import ForgotPasswordSentPage from "@/pages/forgot-password-sent";
 import RestPasswordPage from "@/pages/reset-password";
 import RestPasswordDonePage from "@/pages/reset-password-done";
+import VerifyEmailPage from "@/pages/verify-email";
 
 export const router = createBrowserRouter([
   {
@@ -75,6 +76,14 @@ export const router = createBrowserRouter([
           <AnonymousRoute>
             <RestPasswordDonePage />
           </AnonymousRoute>
+        ),
+      },
+      {
+        path: "email/verify/:id/:hash",
+        element: (
+          <AuthenticatedRoute>
+            <VerifyEmailPage />
+          </AuthenticatedRoute>
         ),
       },
       { path: "*", element: <NotFoundPage /> },

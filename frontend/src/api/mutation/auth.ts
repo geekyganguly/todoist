@@ -5,6 +5,8 @@ import {
   registerApi,
   forgotPasswordApi,
   resetPasswordApi,
+  requestEmailVerificationApi,
+  verifyEmailApi,
   changePasswordApi,
   updateProfileApi,
 } from "@/api/auth";
@@ -37,6 +39,22 @@ export function useResetPasswordApi() {
   return useMutation({
     mutationFn: (data: Record<string, unknown>) => {
       return resetPasswordApi(data);
+    },
+  });
+}
+
+export function useRequestEmailVerificationApi() {
+  return useMutation({
+    mutationFn: () => {
+      return requestEmailVerificationApi();
+    },
+  });
+}
+
+export function useVerifyEmailApi() {
+  return useMutation({
+    mutationFn: (data: Record<string, unknown>) => {
+      return verifyEmailApi(data);
     },
   });
 }

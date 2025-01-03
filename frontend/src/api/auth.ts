@@ -5,6 +5,8 @@ const URLs = Object.freeze({
   REGISTER: "/register",
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
+  REQUEST_EMAIL_VERIFICATION: "/email/request-verification",
+  VERIFY_EMAIL: "/email/verify",
   CHANGE_PASSWORD: "/change-password",
   LOGOUT: "/logout",
   PROFILE: "/me",
@@ -24,6 +26,14 @@ export async function forgotPasswordApi(data: Record<string, unknown>) {
 
 export async function resetPasswordApi(data: Record<string, unknown>) {
   return await baseAxios.post(URLs.RESET_PASSWORD, data);
+}
+
+export async function requestEmailVerificationApi() {
+  return await baseAxios.post(URLs.REQUEST_EMAIL_VERIFICATION);
+}
+
+export async function verifyEmailApi(data: Record<string, unknown>) {
+  return await baseAxios.post(URLs.VERIFY_EMAIL, data);
 }
 
 export async function getProfileApi() {

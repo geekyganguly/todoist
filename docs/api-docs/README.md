@@ -150,6 +150,43 @@ POST /reset-password
 }
 ```
 
+#### Request Email Verification
+
+```
+POST /email/request-verification
+```
+
+**Response:** `200 OK`
+
+```json
+{
+  "message": "Verification link sent"
+}
+```
+
+#### Verify Email
+
+```
+POST /email/verify
+```
+
+**Request Body:**
+
+```json
+{
+  "id": "string",
+  "hash": "string"
+}
+```
+
+**Response:** `200 OK`
+
+```json
+{
+  "message": "Email verified successfully"
+}
+```
+
 #### Get Profile
 
 ```

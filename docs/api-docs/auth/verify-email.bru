@@ -1,0 +1,18 @@
+meta {
+  name: verify-email
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{base_url}}/email/verify
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "14b3fd21bf82a451eee69ab7791c862ceb547dab",
+    "hash": "1"
+  }
+}

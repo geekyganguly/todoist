@@ -18,6 +18,7 @@ export function useCreateProjectApi() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.projects] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.infiniteProjects] });
     },
   });
 }
@@ -29,6 +30,7 @@ export function useUpdateProjectApi(projectId: number) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.projects] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.infiniteProjects] });
     },
   });
 }
@@ -40,6 +42,7 @@ export function useDeleteProjectApi(projectId: number) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.projects] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.infiniteProjects] });
     },
   });
 }

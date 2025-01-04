@@ -22,9 +22,15 @@ class ProjectController extends Controller
         $sharedProjects = SharedProject::where('user_id', $user->id)->pluck('project_id');
         $sharedProjects = Project::whereIn('id', $sharedProjects);
 
-        $data = ProjectResource::collection($projects->union($sharedProjects)->orderBy('created_at', 'desc')->get());
+        $projects = $projects->union($sharedProjects)->orderBy('created_at', 'desc')->simplePaginate(6);
+        $data = ProjectResource::collection($projects);
 
-        return response()->json(['data' => $data], 200);
+        return response()->json([
+            'data' => $data,
+            'meta' => [
+                "has_more_pages" => $projects->hasMorePages(),
+            ]
+        ], 200);
     }
 
     public function store(Request $request)

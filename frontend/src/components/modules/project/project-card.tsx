@@ -52,7 +52,7 @@ export function ProjectCard({ project }: { project: Project }) {
         <div className="flex items-center gap-1">
           {project.is_shared && (
             <>
-              <Badge variant="secondary" className="px-4 h-9 rounded-full">
+              <Badge variant="secondary" className="px-4 h-8 rounded-full">
                 Shared
               </Badge>
             </>

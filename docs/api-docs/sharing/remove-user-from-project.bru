@@ -1,0 +1,16 @@
+meta {
+  name: remove-user-from-project
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{base_url}}/projects/:project_id/users/:user_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  user_id: 2
+  project_id: 10
+}

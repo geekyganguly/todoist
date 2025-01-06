@@ -297,6 +297,14 @@ GET /users/search/{query}
 GET /projects
 ```
 
+**Request Query Params:**
+
+```json
+{
+  "page": "integer"
+}
+```
+
 **Response:** `200 OK`
 
 ```json
@@ -305,13 +313,20 @@ GET /projects
     {
       "id": "integer",
       "title": "string",
-      "is_owner": "boolean",
       "is_shared": "boolean",
-      "is_editor": "boolean",
       "created_at": "string",
-      "updated_at": "string"
+      "updated_at": "string",
+      "permissions": {
+        "can_update": "boolean",
+        "can_delete": "boolean",
+        "can_share": "boolean",
+        "can_create_task": "boolean"
+      }
     }
-  ]
+  ],
+  "meta": {
+    "has_more_pages": "boolean"
+  }
 }
 ```
 
@@ -336,11 +351,15 @@ POST /projects
   "data": {
     "id": "integer",
     "title": "string",
-    "is_owner": "boolean",
     "is_shared": "boolean",
-    "is_editor": "boolean",
     "created_at": "string",
-    "updated_at": "string"
+    "updated_at": "string",
+    "permissions": {
+      "can_update": "boolean",
+      "can_delete": "boolean",
+      "can_share": "boolean",
+      "can_create_task": "boolean"
+    }
   },
   "message": "Project created"
 }
@@ -359,11 +378,15 @@ GET /projects/{id}
   "data": {
     "id": "integer",
     "title": "string",
-    "is_owner": "boolean",
     "is_shared": "boolean",
-    "is_editor": "boolean",
     "created_at": "string",
-    "updated_at": "string"
+    "updated_at": "string",
+    "permissions": {
+      "can_update": "boolean",
+      "can_delete": "boolean",
+      "can_share": "boolean",
+      "can_create_task": "boolean"
+    }
   }
 }
 ```
@@ -389,11 +412,15 @@ PUT /projects/{id}
   "data": {
     "id": "integer",
     "title": "string",
-    "is_owner": "boolean",
     "is_shared": "boolean",
-    "is_editor": "boolean",
     "created_at": "string",
-    "updated_at": "string"
+    "updated_at": "string",
+    "permissions": {
+      "can_update": "boolean",
+      "can_delete": "boolean",
+      "can_share": "boolean",
+      "can_create_task": "boolean"
+    }
   },
   "message": "Project updated"
 }
@@ -428,18 +455,14 @@ GET /projects/{project_id}/tasks
   "data": [
     {
       "id": "number",
+      "project_id": "number",
       "title": "string",
       "is_completed": "boolean",
       "created_at": "string",
       "updated_at": "string",
-      "project": {
-        "id": "number",
-        "title": "string",
-        "is_owner": "boolean",
-        "is_shared": "boolean",
-        "is_editor": "boolean",
-        "created_at": "string",
-        "updated_at": "string"
+      "permissions": {
+        "can_update": "boolean",
+        "can_delete": "boolean"
       }
     }
   ]
@@ -466,18 +489,14 @@ POST /projects/{project_id}/tasks
 {
   "data": {
     "id": "number",
+    "project_id": "number",
     "title": "string",
     "is_completed": "boolean",
     "created_at": "string",
     "updated_at": "string",
-    "project": {
-      "id": "number",
-      "title": "string",
-      "is_owner": "boolean",
-      "is_shared": "boolean",
-      "is_editor": "boolean",
-      "created_at": "string",
-      "updated_at": "string"
+    "permissions": {
+      "can_update": "boolean",
+      "can_delete": "boolean"
     }
   },
   "message": "Task created"
@@ -504,18 +523,14 @@ PUT /projects/{project_id}/tasks/{task_id}
 {
   "data": {
     "id": "number",
+    "project_id": "number",
     "title": "string",
     "is_completed": "boolean",
     "created_at": "string",
     "updated_at": "string",
-    "project": {
-      "id": "number",
-      "title": "string",
-      "is_owner": "boolean",
-      "is_shared": "boolean",
-      "is_editor": "boolean",
-      "created_at": "string",
-      "updated_at": "string"
+    "permissions": {
+      "can_update": "boolean",
+      "can_delete": "boolean"
     }
   },
   "message": "Task updated"
@@ -538,10 +553,10 @@ DELETE /projects/{project_id}/tasks/{task_id}
 
 ### Sharing & Permissions
 
-#### Get Project Share List
+#### Get Project Users (List of users that have access to the project)
 
 ```
-GET /projects/{project_id}/share
+GET /projects/{project_id}/users
 ```
 
 **Response:** `200 OK`
@@ -551,33 +566,23 @@ GET /projects/{project_id}/share
   "data": [
     {
       "id": "number",
-      "permission": "string",
-      "user": {
-        "id": "number",
-        "name": "string",
-        "email": "string",
-        "username": "string",
-        "created_at": "string",
-        "updated_at": "string"
-      },
-      "project": {
-        "id": "number",
-        "title": "string",
-        "is_owner": "boolean",
-        "is_shared": "boolean",
-        "is_editor": "boolean",
-        "created_at": "string",
-        "updated_at": "string"
+      "role": "string",
+      "name": "string",
+      "email": "string",
+      "username": "string",
+      "permissions": {
+        "can_update": "boolean",
+        "can_delete": "boolean"
       }
     }
   ]
 }
 ```
 
-#### Share Project
+#### Add Users to Project
 
 ```
-POST /projects/{project_id}/share
+POST /projects/{project_id}/users
 ```
 
 **Request Body:**
@@ -585,7 +590,7 @@ POST /projects/{project_id}/share
 ```json
 {
   "user_ids": ["number"],
-  "permission": "string" // "viewer" or "editor"
+  "role": "string" // "viewer" or "editor"
 }
 ```
 
@@ -596,23 +601,13 @@ POST /projects/{project_id}/share
   "data": [
     {
       "id": "number",
-      "permission": "string",
-      "user": {
-        "id": "number",
-        "name": "string",
-        "email": "string",
-        "username": "string",
-        "created_at": "string",
-        "updated_at": "string"
-      },
-      "project": {
-        "id": "number",
-        "title": "string",
-        "is_owner": "boolean",
-        "is_shared": "boolean",
-        "is_editor": "boolean",
-        "created_at": "string",
-        "updated_at": "string"
+      "role": "string",
+      "name": "string",
+      "email": "string",
+      "username": "string",
+      "permissions": {
+        "can_update": "boolean",
+        "can_delete": "boolean"
       }
     }
   ],
@@ -620,17 +615,17 @@ POST /projects/{project_id}/share
 }
 ```
 
-#### Update Share Permission
+#### Update Role
 
 ```
-PUT /projects/{project_id}/share/{user_id}
+PUT /projects/{project_id}/users/{user_id}
 ```
 
 **Request Body:**
 
 ```json
 {
-  "permission": "string" // "viewer" or "editor"
+  "role": "string" // "viewer" or "editor"
 }
 ```
 
@@ -640,33 +635,23 @@ PUT /projects/{project_id}/share/{user_id}
 {
   "data": {
     "id": "number",
-    "permission": "string",
-    "user": {
-      "id": "number",
-      "name": "string",
-      "email": "string",
-      "username": "string",
-      "created_at": "string",
-      "updated_at": "string"
-    },
-    "project": {
-      "id": "number",
-      "title": "string",
-      "is_owner": "boolean",
-      "is_shared": "boolean",
-      "is_editor": "boolean",
-      "created_at": "string",
-      "updated_at": "string"
+    "role": "string",
+    "name": "string",
+    "email": "string",
+    "username": "string",
+    "permissions": {
+      "can_update": "boolean",
+      "can_delete": "boolean"
     }
   },
   "message": "Permission updated successfully"
 }
 ```
 
-#### Remove Share Access
+#### Remove User from Project
 
 ```
-DELETE /project/{project_id}/share/{user_id}
+DELETE /project/{project_id}/users/{user_id}
 ```
 
 **Response:** `200 OK`

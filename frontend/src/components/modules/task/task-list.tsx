@@ -8,8 +8,8 @@ export function TaskList({ project }: { project: Project }) {
 
   return (
     <div className="space-y-4">
-      {tasks?.map((task) => (
-        <TaskCard key={task.id} task={task} />
+      {tasks?.map((task, index) => (
+        <TaskCard key={task.id} task={task} index={index} />
       ))}
     </div>
   );

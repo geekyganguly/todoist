@@ -14,7 +14,7 @@ import { TaskAdd } from "@/components/modules/task/task-add";
 import { TaskList } from "@/components/modules/task/task-list";
 import { ProjectDelete } from "@/components/modules/project/project-delete";
 import {
-  ProjectEdit,
+  ProjectEditForm,
   ProjectEditButton,
 } from "@/components/modules/project/project-edit";
 import { ProjectShare } from "@/components/modules/project/project-share";
@@ -29,40 +29,37 @@ export function ProjectCard({ project }: { project: Project }) {
     <Card className="flex flex-col">
       <CardHeader className="flex flex-row items-start justify-between gap-1 space-y-0">
         {isEditing ? (
-          <ProjectEdit
+          <ProjectEditForm
             project={project}
             closeEditing={() => setIsEditing(false)}
           />
         ) : (
           <div className="flex-1 flex items-start justify-between gap-1">
-            <div className="flex flex-col space-y-1">
-              <CardTitle>{project.title}</CardTitle>
+            <div className="flex flex-col">
+              <CardTitle className="text-lg">{project.title}</CardTitle>
 
               <CardDescription>
                 {formatDate(project.updated_at)}
               </CardDescription>
             </div>
 
-            {(project.is_owner || project.is_editor) && (
+            {project.permissions.can_update && (
               <ProjectEditButton onClick={() => setIsEditing(true)} />
             )}
           </div>
         )}
 
         <div className="flex items-center gap-1">
-          {project.is_shared && (
-            <>
-              <Badge variant="secondary" className="px-4 h-8 rounded-full">
-                Shared
-              </Badge>
-            </>
+          {project.permissions.can_delete && (
+            <ProjectDelete project={project} />
           )}
 
-          {project.is_owner && (
-            <div className="flex items-center gap-1">
-              <ProjectDelete project={project} />
-              <ProjectShare project={project} />
-            </div>
+          {project.permissions.can_share && <ProjectShare project={project} />}
+
+          {project.is_shared && (
+            <Badge variant="secondary" className="px-4 h-8 rounded-full">
+              Shared
+            </Badge>
           )}
         </div>
       </CardHeader>
@@ -71,7 +68,7 @@ export function ProjectCard({ project }: { project: Project }) {
         <TaskList project={project} />
       </CardContent>
 
-      {(project.is_owner || project.is_editor) && (
+      {project.permissions.can_create_task && (
         <CardFooter>
           <TaskAdd project={project} />
         </CardFooter>

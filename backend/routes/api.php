@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Config;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\SharedProjectController;
+use App\Http\Controllers\ProjectUserController;
 use App\Http\Controllers\TaskController;
 
 Route::middleware('guest')->group(function () {
@@ -47,5 +47,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('projects', ProjectController::class);
     Route::apiResource('projects.tasks', TaskController::class);
-    Route::apiResource('projects.share', SharedProjectController::class);
+    Route::apiResource('projects.users', ProjectUserController::class);
 });

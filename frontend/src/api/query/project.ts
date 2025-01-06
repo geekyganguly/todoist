@@ -1,12 +1,12 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
-import { Project, SharedProject } from "@/types/project";
-import { getProjectsApi, getProjectShareListApi } from "@/api/project";
+import { Project, ProjectUser } from "@/types/project";
+import { getProjectsApi, getProjectUsersApi } from "@/api/project";
 
 export const queryKeys = Object.freeze({
   projects: "projects",
   infiniteProjects: "infinite-projects",
-  projectShareList: "project-share-list",
+  projectUsers: "project-users",
 });
 
 export function useGetProjectsApi() {
@@ -45,14 +45,14 @@ export function useGetInfiniteProjectsApi() {
   return { ...query, data };
 }
 
-export function useGetProjectShareListApi(projectId: number) {
+export function useGetProjectUsersApi(projectId: number) {
   const fetcher = async () => {
-    const res = await getProjectShareListApi(projectId);
+    const res = await getProjectUsersApi(projectId);
     return res.data.data;
   };
 
-  return useQuery<SharedProject[]>({
-    queryKey: [queryKeys.projectShareList, projectId],
+  return useQuery<ProjectUser[]>({
+    queryKey: [queryKeys.projectUsers, projectId],
     queryFn: fetcher,
   });
 }

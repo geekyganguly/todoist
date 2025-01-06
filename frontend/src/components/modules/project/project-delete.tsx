@@ -23,7 +23,7 @@ export function ProjectDelete({ project }: { project: Project }) {
   const onSubmit = () => {
     deleteProject()
       .then(() => {
-        toast.success("Project deleted successfully");
+        toast.success("Task list deleted successfully");
       })
       .catch(() => toast.error("Something went wrong!"))
       .finally(() => setIsDeleting(false));
@@ -74,7 +74,7 @@ export function ProjectDelete({ project }: { project: Project }) {
               <TrashIcon />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Delete Project</TooltipContent>
+          <TooltipContent>Delete</TooltipContent>
         </Tooltip>
       )}
     </div>

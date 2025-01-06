@@ -22,14 +22,14 @@ export function useProjectForm(project?: Project) {
 
 export type ProjectShareFormData = {
   users: Option[];
-  permission: string;
+  role: string;
 };
 
 export function useProjectShareForm() {
   return useForm<ProjectShareFormData>({
     defaultValues: {
       users: [],
-      permission: "viewer",
+      role: "viewer",
     },
   });
 }

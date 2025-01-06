@@ -29,7 +29,10 @@ export function TaskAdd({ project }: { project: Project }) {
         className="flex-1 flex items-center"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <PlusCircleIcon className="size-6" />
+        <PlusCircleIcon
+          className="size-6"
+          onClick={() => form.setFocus("title")}
+        />
 
         <FormField
           control={form.control}

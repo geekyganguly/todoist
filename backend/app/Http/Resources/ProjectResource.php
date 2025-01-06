@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\SharedProject;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,17 +15,18 @@ class ProjectResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $user = $request->user();
-        $sharing = SharedProject::where('project_id', $this->id)->where('user_id', $user->id)->first();
-
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'is_owner' => $this->user_id == $user->id,
-            'is_shared' => $sharing ? true : false,
-            'is_editor' => $sharing ? $sharing->permission == 'editor' : false,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'is_shared' => $request->user()->isNot($this->owner()),
+            'permissions' => [
+                'can_update' => $request->user()->can('update', $this->resource),
+                'can_delete' => $request->user()->can('delete', $this->resource),
+                'can_share' => $request->user()->can('share', $this->resource),
+                'can_create_task' => $request->user()->can('create', [Task::class, $this->resource]),
+            ]
         ];
     }
 }

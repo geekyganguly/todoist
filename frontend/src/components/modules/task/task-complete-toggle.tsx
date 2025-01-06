@@ -8,7 +8,7 @@ export function TaskCompleteToggle({ task }: { task: Task }) {
   const [checked, setChecked] = useState(false);
 
   const { mutateAsync: updateTask, isPending } = useUpdateTaskApi(
-    task.project.id,
+    task.project_id,
     task.id
   );
 

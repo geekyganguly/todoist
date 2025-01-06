@@ -17,7 +17,7 @@ export function TaskDelete({ task }: { task: Task }) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const { mutateAsync: deleteTask, isPending } = useDeleteTaskApi(
-    task.project.id,
+    task.project_id,
     task.id
   );
 
@@ -75,7 +75,7 @@ export function TaskDelete({ task }: { task: Task }) {
               <TrashIcon />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Delete Task</TooltipContent>
+          <TooltipContent>Delete</TooltipContent>
         </Tooltip>
       )}
     </div>

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { toast } from "sonner";
 import { CheckIcon, LoaderCircleIcon, PencilIcon, XIcon } from "lucide-react";
 
@@ -16,7 +17,7 @@ import { useUpdateProjectApi } from "@/api/mutation/project";
 import { TaskFormData } from "@/forms/task";
 import { Project } from "@/types/project";
 
-export function ProjectEdit({
+export function ProjectEditForm({
   project,
   closeEditing,
 }: {
@@ -33,11 +34,15 @@ export function ProjectEdit({
     updateProject(data)
       .then(() => {
         form.reset();
-        toast.success("Project updated successfully");
+        toast.success("Task list updated successfully");
       })
-      .catch(() => toast.error("Failed to update project"))
+      .catch(() => toast.error("Failed to update task list"))
       .finally(() => closeEditing());
   };
+
+  useEffect(() => {
+    form.setFocus("title");
+  }, [form]);
 
   return (
     <Form {...form}>
@@ -112,7 +117,7 @@ export function ProjectEditButton({ onClick }: { onClick: () => void }) {
         </Button>
       </TooltipTrigger>
 
-      <TooltipContent>Edit Project</TooltipContent>
+      <TooltipContent>Edit</TooltipContent>
     </Tooltip>
   );
 }

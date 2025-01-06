@@ -4,18 +4,21 @@ export type Project = {
   id: number;
   user: User;
   title: string;
-  is_owner: boolean;
-  is_shared: boolean;
-  is_editor: boolean;
   created_at: string;
   updated_at: string;
+  is_shared: boolean;
+  permissions: {
+    can_update: boolean;
+    can_delete: boolean;
+    can_share: boolean;
+    can_create_task: boolean;
+  };
 };
 
-export type SharedProject = {
-  id: number;
-  user: User;
-  project: Project;
-  permission: string;
-  created_at: string;
-  updated_at: string;
+export type ProjectUser = User & {
+  role: string;
+  permissions: {
+    can_update: boolean;
+    can_delete: boolean;
+  };
 };

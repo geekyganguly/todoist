@@ -12,36 +12,56 @@ class TaskController extends Controller
 {
     public function index(Request $request, Project $project)
     {
-        // fetch all tasks for the task list
-        $tasks = Task::with('project')->where('project_id', $project->id);
-        $data = TaskResource::collection($tasks->orderBy('created_at', 'desc')->get());
+        $this->authorize('viewAny', [Task::class, $project]);
 
-        return response()->json(['data' => $data], 200);
+        // fetch all tasks for the project
+        $tasks = $project->tasks();
+
+        // apply ordering and pagination
+        $tasks = $tasks->orderBy('created_at', 'desc')->get();
+
+        return response()->json([
+            'data' => TaskResource::collection($tasks)
+        ], 200);
     }
+
 
     public function store(Request $request, Project $project)
     {
+        $this->authorize('create', [Task::class, $project]);
+
         // validate the request
         $request->validate([
             'title' => 'required|string|max:255',
         ]);
 
-        // get user from request
-        $user = $request->user();
-
+        // create task
         $task = Task::create([
             'title' => $request->title,
             'project_id' => $project->id,
-            'user_id' => $user->id,
         ]);
-        $data = new TaskResource($task);
 
-
-        return response()->json(['data' => $data, 'message' => 'Task created'], 201);
+        return response()->json([
+            'data' => new TaskResource($task),
+            'message' => 'Task created'
+        ], 201);
     }
 
-    public function update(Request $request, int $projectId, Task $task)
+
+    public function show(Project $project, Task $task)
     {
+        $this->authorize('view', $task);
+
+        return response()->json([
+            'data' => new TaskResource($task)
+        ]);
+    }
+
+
+    public function update(Request $request, Project $project, Task $task)
+    {
+        $this->authorize('update', $task);
+
         // validate the request
         $request->validate([
             'title' => 'sometimes|string|max:255',
@@ -50,16 +70,23 @@ class TaskController extends Controller
 
         // update task
         $task->update($request->all());
-        $data = new TaskResource($task);
 
-        return response()->json(['data' => $data, 'message' => 'Task updated']);
+        return response()->json([
+            'data' => new TaskResource($task),
+            'message' => 'Task updated'
+        ]);
     }
 
-    public function destroy(int $projectId, Task $task)
+
+    public function destroy(Project $project, Task $task)
     {
+        $this->authorize('delete', $task);
+
         // delete task
         $task->delete();
 
-        return response()->json(['message' => 'Task deleted'], 200);
+        return response()->json([
+            'message' => 'Task deleted'
+        ], 200);
     }
 }

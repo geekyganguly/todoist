@@ -24,31 +24,28 @@ export async function deleteProjectApi(projectId: number) {
   return await baseAxios.delete(`/projects/${projectId}`);
 }
 
-export async function getProjectShareListApi(
+export async function getProjectUsersApi(
   projectId: number,
   config?: AxiosRequestConfig
 ) {
-  return await baseAxios.get(`/projects/${projectId}/share`, config);
+  return await baseAxios.get(`/projects/${projectId}/users`, config);
 }
 
 export async function shareProjectApi(
   projectId: number,
   data: Record<string, unknown>
 ) {
-  return await baseAxios.post(`/projects/${projectId}/share`, data);
+  return await baseAxios.post(`/projects/${projectId}/users`, data);
 }
 
-export async function updateProjectSharePermissionApi(
+export async function updateProjectUserApi(
   projectId: number,
   userId: number,
   data: Record<string, unknown>
 ) {
-  return await baseAxios.put(`/projects/${projectId}/share/${userId}`, data);
+  return await baseAxios.put(`/projects/${projectId}/users/${userId}`, data);
 }
 
-export async function deleteProjectShareAccessApi(
-  projectId: number,
-  userId: number
-) {
-  return await baseAxios.delete(`/projects/${projectId}/share/${userId}`);
+export async function deleteProjectUserApi(projectId: number, userId: number) {
+  return await baseAxios.delete(`/projects/${projectId}/users/${userId}`);
 }

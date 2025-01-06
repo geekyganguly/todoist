@@ -1,10 +1,12 @@
-import { Project } from "@/types/project";
-
 export type Task = {
   id: number;
-  project: Project;
+  project_id: number;
   title: string;
   is_completed: boolean;
   created_at: string;
   updated_at: string;
+  permissions: {
+    can_update: boolean;
+    can_delete: boolean;
+  };
 };

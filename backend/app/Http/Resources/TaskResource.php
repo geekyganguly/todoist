@@ -16,11 +16,15 @@ class TaskResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'project_id' => $this->project_id,
             'title' => $this->title,
             'is_completed' => $this->is_completed,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'project' => new ProjectResource($this->project),
+            'permissions' => [
+                'can_update' => $request->user()->can('update', $this->resource),
+                'can_delete' => $request->user()->can('update', $this->resource),
+            ]
         ];
     }
 }

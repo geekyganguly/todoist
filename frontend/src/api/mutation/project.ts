@@ -4,11 +4,11 @@ import { queryClient } from "@/api/base";
 import { queryKeys } from "@/api/query/project";
 import {
   createProjectApi,
+  updateProjectApi,
   deleteProjectApi,
   shareProjectApi,
-  updateProjectSharePermissionApi,
-  deleteProjectShareAccessApi,
-  updateProjectApi,
+  updateProjectUserApi,
+  deleteProjectUserApi,
 } from "@/api/project";
 
 export function useCreateProjectApi() {
@@ -54,39 +54,33 @@ export function useShareProjectApi(projectId: number) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [queryKeys.projectShareList, projectId],
+        queryKey: [queryKeys.projectUsers, projectId],
       });
     },
   });
 }
 
-export function useUpdateProjectSharePermissionApi(
-  projectId: number,
-  userId: number
-) {
+export function useUpdateProjectUserApi(projectId: number, userId: number) {
   return useMutation({
     mutationFn: (data: Record<string, unknown>) => {
-      return updateProjectSharePermissionApi(projectId, userId, data);
+      return updateProjectUserApi(projectId, userId, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [queryKeys.projectShareList, projectId],
+        queryKey: [queryKeys.projectUsers, projectId],
       });
     },
   });
 }
 
-export function useRemoveProjectShareAccessApi(
-  projectId: number,
-  userId: number
-) {
+export function useDeleteProjectUserApi(projectId: number, userId: number) {
   return useMutation({
     mutationFn: () => {
-      return deleteProjectShareAccessApi(projectId, userId);
+      return deleteProjectUserApi(projectId, userId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [queryKeys.projectShareList, projectId],
+        queryKey: [queryKeys.projectUsers, projectId],
       });
     },
   });

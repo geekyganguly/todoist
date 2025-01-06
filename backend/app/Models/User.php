@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+use App\Enums\ProjectUserRole;
+
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -46,5 +48,25 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class)
+            ->using(ProjectUser::class)
+            ->withPivot('role')
+            ->withTimestamps();
+    }
+
+    public function ownedProjects()
+    {
+        return $this->projects()
+            ->wherePivot('role', ProjectUserRole::OWNER);
+    }
+
+    public function sharedProjects()
+    {
+        return $this->projects()
+            ->wherePivotIn('role', [ProjectUserRole::EDITOR, ProjectUserRole::VIEWER]);
     }
 }

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { toast } from "sonner";
 import { CheckIcon, LoaderCircleIcon, PencilIcon, XIcon } from "lucide-react";
 
@@ -25,7 +26,7 @@ export function TaskEdit({
   const form = useTaskForm(task);
 
   const { mutateAsync: updateTask, isPending } = useUpdateTaskApi(
-    task.project.id,
+    task.project_id,
     task.id
   );
 
@@ -38,6 +39,10 @@ export function TaskEdit({
       .catch(() => toast.error("Failed to update task"))
       .finally(() => closeEditing());
   };
+
+  useEffect(() => {
+    form.setFocus("title");
+  }, [form]);
 
   return (
     <Form {...form}>
@@ -112,7 +117,7 @@ export function TaskEditButton({ onClick }: { onClick: () => void }) {
         </Button>
       </TooltipTrigger>
 
-      <TooltipContent>Edit Task</TooltipContent>
+      <TooltipContent>Edit</TooltipContent>
     </Tooltip>
   );
 }

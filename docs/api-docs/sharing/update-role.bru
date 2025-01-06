@@ -1,0 +1,22 @@
+meta {
+  name: update-role
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{base_url}}/projects/:project_id/users/:user_id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  user_id: 2
+  project_id: 10
+}
+
+body:json {
+  {
+    "role": "editor" // "viewer" or "editor"
+  }
+}

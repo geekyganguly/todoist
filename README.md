@@ -5,11 +5,13 @@ A collaborative task management application built with Laravel (API Backend) and
 ## Features
 
 - **Task List Management**
+
   - Create multiple task lists to organize your tasks
   - Add, edit, and delete tasks within lists
   - Mark tasks as complete/incomplete
 
 - **Collaboration**
+
   - Share task lists with other users
   - Granular permission control (Viewer/Editor)
 
@@ -21,12 +23,14 @@ A collaborative task management application built with Laravel (API Backend) and
 ## Tech Stack
 
 ### Backend
+
 - Laravel (PHP Framework)
 - Postgres SQL Database
 - RESTful API Architecture
 - Docker containerization
 
 ### Frontend
+
 - React.js
 - Tailwind CSS
 - shadcn/ui components
@@ -52,6 +56,7 @@ cd todoist
 Both the backend and frontend directories contain example environment files that need to be copied and configured.
 
 #### Backend Environment Setup
+
 ```bash
 # Navigate to backend directory
 cd backend
@@ -71,7 +76,8 @@ APP_ENV=local
 APP_KEY=base64:j4GuxOtN4GKjNQrMEMyR/cf9zNMx5a7kb/e2bHHF5Ho=
 APP_DEBUG=true
 APP_TIMEZONE=UTC
-APP_URL=http://localhost
+APP_URL=http://localhost:8000
+APP_FRONTEND_URL=http://localhost:5173
 APP_PORT=8000
 
 DB_CONNECTION=pgsql
@@ -83,6 +89,7 @@ DB_PASSWORD=password
 ```
 
 #### Frontend Environment Setup
+
 ```bash
 # Navigate to frontend directory
 cd frontend
@@ -97,7 +104,7 @@ cd ..
 The frontend `.env` file should contain:
 
 ```env
-VITE_PORT=5000
+VITE_PORT=5173
 VITE_API_URL=http://localhost:8000/api
 ```
 
@@ -119,7 +126,7 @@ docker compose --env-file ./backend/.env --env-file ./frontend/.env exec backend
 
 ## Accessing the Application
 
-- Frontend: [http://localhost:5000](http://localhost:5000)
+- Frontend: [http://localhost:5173](http://localhost:5173)
 - Backend API: [http://localhost:8000](http://localhost:8000)
 
 ## API Documentation

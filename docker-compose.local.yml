@@ -21,12 +21,13 @@ services:
       dockerfile: Dockerfile.local
     volumes:
       - ./backend:/var/www
+      - /var/www/vendor
     depends_on:
       - database
     networks:
       - default
     ports:
-      - '${APP_PORT-8080}:8000'
+      - '${APP_PORT-8000}:8000'
 
   database:
     container_name: database

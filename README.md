@@ -114,6 +114,9 @@ Start all services using Docker Compose:
 
 ```bash
 docker compose -f docker-compose.local.yml --env-file ./backend/.env --env-file ./frontend/.env up --build
+
+# or if yarn installed
+yarn dev:start
 ```
 
 ### 4. Database Setup
@@ -121,13 +124,16 @@ docker compose -f docker-compose.local.yml --env-file ./backend/.env --env-file 
 Run database migrations:
 
 ```bash
-docker compose --env-file ./backend/.env --env-file ./frontend/.env exec backend php artisan migrate
+docker compose -f docker-compose.local.yml --env-file ./backend/.env --env-file ./frontend/.env exec backend php artisan migrate
+
+# or if yarn installed
+yarn dev:migrate
 ```
 
 ## Accessing the Application
 
-- Frontend: [http://localhost:5173](http://localhost:5173)
-- Backend API: [http://localhost:8000](http://localhost:8000)
+- Frontend App: [http://localhost:5173](http://localhost:5173)
+- Backend API Base URL: [http://localhost:8000/api](http://localhost:8000/api)
 
 ## API Documentation
 
